@@ -32,14 +32,21 @@ const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(pointLight,ambientLight);
 
 const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(gridHelper);
+//scene.add(gridHelper);
 
 
 
 function addRainDrop() {
-  const geomentry = new THREE.SphereGeometry(0.1, 24, 24);
-  const material = new THREE.MeshStandardMaterial( {color: 0x19297C});
+
+  
+  const geomentry = new THREE.SphereGeometry(0.2, 24, 24);
+  const material = new THREE.MeshStandardMaterial( {
+    color: 0x19297C,
+    opacity: 0.2,
+  });
   const drop = new THREE.Mesh(geomentry, material);
+
+
 
   const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(200));
   drop.position.set(x,y,z);
@@ -47,7 +54,7 @@ function addRainDrop() {
   scene.add(drop);
 }
 
-Array(500).fill().forEach(addRainDrop);
+Array(400).fill().forEach(addRainDrop);
 
 
 
@@ -58,16 +65,38 @@ scene.background = forestTexture;
 function moveCam(){
 
 const t = document.body.getBoundingClientRect().top;
+const dir = document.body.scrollTop;
+
   // Very inefficiant way of making rain... pls stop
-  for(let i = 4;i< scene.children.length -4;i++){
-    scene.children[i].position.y -= 1;
 
-    if(scene.children[i].position.y <= 0){
-      scene.children[i].position.y = THREE.MathUtils.randFloatSpread(100);
-      
+
+  window.onscroll = function(e) {
+    // print "false" if direction is down and "true" if up
+    if(this.oldScroll > this.scrollY) {
+      for(let i = 4;i< scene.children.length -4;i++){
+
+        scene.children[i].position.y -= -3;
+
+        if(scene.children[i].position.y >= 200){
+          scene.children[i].position.y = THREE.MathUtils.randFloatSpread(100);
+          
+        }
+      }
+    } else {
+      for(let i = 4;i< scene.children.length -4;i++){
+
+        scene.children[i].position.y -= 3;
+
+        if(scene.children[i].position.y <= 0 ){
+          scene.children[i].position.y = THREE.MathUtils.randFloatSpread(200);
+          
+        }
+      }
     }
+    console.log(this.oldScroll > this.scrollY);
+    this.oldScroll = this.scrollY;
   }
-
+  
 }
 document.body.onscroll = moveCam
 
