@@ -23,6 +23,15 @@ camera.rotation.x = 0.2;
 
 renderer.render( scene, camera );
 
+const ahegao = new THREE.TextureLoader().load("gay.jpg");
+
+const plane = new THREE.Mesh(
+  new THREE.BoxGeometry(10,10,10),
+  new THREE.MeshStandardMaterial({
+    map: ahegao,
+  })
+)
+scene.add(plane);
 
 const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(20,20,20);
@@ -69,23 +78,28 @@ const dir = document.body.scrollTop;
 
   // Very inefficiant way of making rain... pls stop
 
-
+  let velocity;
   window.onscroll = function(e) {
+    velocity = 3;
     // print "false" if direction is down and "true" if up
+
+
+    
     if(this.oldScroll > this.scrollY) {
+      
       for(let i = 4;i< scene.children.length -4;i++){
 
-        scene.children[i].position.y -= -3;
+        scene.children[i].position.y += velocity;
 
-        if(scene.children[i].position.y >= 200){
+        if(scene.children[i].position.y >= 100){
           scene.children[i].position.y = THREE.MathUtils.randFloatSpread(100);
           
         }
       }
     } else {
-      for(let i = 4;i< scene.children.length -4;i++){
-
-        scene.children[i].position.y -= 3;
+      for(let i = 3;i< scene.children.length -4;i++){
+        
+        scene.children[i].position.y -= velocity;
 
         if(scene.children[i].position.y <= 0 ){
           scene.children[i].position.y = THREE.MathUtils.randFloatSpread(200);
@@ -93,10 +107,10 @@ const dir = document.body.scrollTop;
         }
       }
     }
-    console.log(this.oldScroll > this.scrollY);
     this.oldScroll = this.scrollY;
-  }
-  
+    
+
+}
 }
 document.body.onscroll = moveCam
 
@@ -104,6 +118,10 @@ document.body.onscroll = moveCam
 function animate() {
   requestAnimationFrame( animate );
 
+
+plane.rotateY(0.010);
+plane.rotateZ(0.05);
+plane.rotateX(0.01);
   
 
 
