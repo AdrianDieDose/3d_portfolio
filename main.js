@@ -19,10 +19,9 @@ const renderer = new THREE.WebGL1Renderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(60);
-camera.position.setY(10);
-
-camera.rotation.x = 0.2;
+//camera.position.setZ(60);
+//camera.position.setY(10);
+//camera.rotation.x = 0.2;
 
 renderer.render(scene, camera);
 
@@ -64,7 +63,7 @@ scene.background = new THREE.Color(Theme._darkred);
 const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
   const pointXYArray = calcSpaces(planeHeight, planeWidth, nPoints, offset);
   for (let i = 0; i < pointXYArray.length; i++) {
-    const geomentry = new THREE.SphereGeometry(0.2, 24, 24);
+    const geomentry = new THREE.SphereGeometry(0.4, 24, 24);
     const material = new THREE.MeshStandardMaterial({ color: 0x19297c });
     const point = new THREE.Mesh(geomentry, material);
     point.position.set(pointXYArray[i][0], pointXYArray[i][1], 0);
@@ -73,25 +72,34 @@ const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
   }
 };
 
-makePoints(40, 40, 200, -10);
+makePoints(200, 200, 1500, -100);
 // Needs fix bc trash... why cant this variable be passed with the function ;,)
-let speedAndDirection1 = 0.05;
-let speedAndDirection2 = -0.05;
-const animatePointsZ = function (depth, splitter) {
-  for (let i = 0; i < sphereOutOfPoints.children.length / splitter; i++) {
-    if (sphereOutOfPoints.children[i * splitter].position.z >= depth) {
-      speedAndDirection1 = -Math.abs(speedAndDirection1);
-    } else if (sphereOutOfPoints.children[i * splitter].position.z <= -depth) {
-      speedAndDirection1 = Math.abs(speedAndDirection1);
+let speedAndDirection1 = 0.009;
+let speedAndDirection2 = -0.009;
+const animatePointsZ = function (depth) {
+  for (let i = 0; i < sphereOutOfPoints.children.length; i++) {
+    if (i % 2 === 0) {
+      if (sphereOutOfPoints.children[i].position.z >= depth) {
+        speedAndDirection1 = -Math.abs(speedAndDirection1);
+      } else if (sphereOutOfPoints.children[i].position.z <= -depth) {
+        speedAndDirection1 = Math.abs(speedAndDirection1);
+      }
+      sphereOutOfPoints.children[i].position.z += speedAndDirection1;
+    } else {
+      if (sphereOutOfPoints.children[i].position.z >= depth) {
+        speedAndDirection2 = -Math.abs(speedAndDirection2);
+      } else if (sphereOutOfPoints.children[i].position.z <= -depth) {
+        speedAndDirection2 = Math.abs(speedAndDirection2);
+      }
+      sphereOutOfPoints.children[i].position.z += speedAndDirection2;
     }
-    sphereOutOfPoints.children[i * splitter].position.z += speedAndDirection1;
   }
   /*
 
 
 
   //They are still bc they cancel each other out
-  // Current state: cant fix the top row not being aligned right to move and also to move all other half of the dots in reverse..
+  // Current state: cant fix the top row not being aligned right to move and also to move all other half of the dots in reverse.
 
 
 
@@ -106,22 +114,32 @@ const animatePointsZ = function (depth, splitter) {
   */
 };
 
-/*
+//
+//  If we want a camera z zoomout we need to set the intial z axis but when we do this the animatePointZ function breaks bc we rely on fixed z=0
+//
+camera.position.z = 50;
+function moveCam() {
+  const t = document.body.getBoundingClientRect().top;
+  console.log(t);
+  camera.position.y = t * -0.02;
+  camera.position.z = t * -0.02;
 
-function moveCam(){
-
-const t = document.body.getBoundingClientRect().top;
-const dir = document.body.scrollTop;
-
-
-  
-
+  camera.rotation.x = t * 0.0001;
 }
-*/
+document.body.onscroll = moveCam;
+
+// Window rezize fix needed !
+function onWindowResize() {
+  _width = window.innerWidth;
+  _height = window.innerHeight;
+  renderer.setSize(_width, _height);
+  camera.aspect = _width / _height;
+  console.log("- resize -");
+}
 
 function animate() {
   requestAnimationFrame(animate);
-  animatePointsZ(0.5, 4);
+  animatePointsZ(0.5);
   renderer.render(scene, camera);
 }
 
