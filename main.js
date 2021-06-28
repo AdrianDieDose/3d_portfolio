@@ -3,8 +3,8 @@ import "./style.css";
 import * as THREE from "three";
 import { MathUtils } from "three";
 
-var Theme = { _darkred: 0x000000 };
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -16,12 +16,8 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGL1Renderer({
   canvas: document.querySelector("#bg"),
 });
-
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-//camera.position.setZ(60);
-//camera.position.setY(10);
-//camera.rotation.x = 0.2;
 
 renderer.render(scene, camera);
 
@@ -30,16 +26,14 @@ pointLight.position.set(20, 20, 20);
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
-scene.add(pointLight, ambientLight);
+scene.add(pointLight);
 
 const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(gridHelper);
+//scene.add(gridHelper);
 
-const planeHeight = 20;
-const planeWidth = 20;
-//Need even and uneven fix!
-const geomentry = new THREE.PlaneGeometry(planeHeight, planeWidth);
-const material = new THREE.MeshStandardMaterial({ wireframe: true });
+//Placeholder for time being for pinning out all points ... need fix
+const geomentry = new THREE.PlaneGeometry(0, 0);
+const material = new THREE.MeshStandardMaterial({});
 const sphereOutOfPoints = new THREE.Mesh(geomentry, material);
 sphereOutOfPoints.name = "pointsSphere";
 scene.add(sphereOutOfPoints);
@@ -58,15 +52,14 @@ const calcSpaces = function (planeHeight, planeWidth, nPoints, offset) {
   return xy;
 };
 
-scene.background = new THREE.Color(Theme._darkred);
-
 const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
   const pointXYArray = calcSpaces(planeHeight, planeWidth, nPoints, offset);
+  const initialZCord = 50;
   for (let i = 0; i < pointXYArray.length; i++) {
-    const geomentry = new THREE.SphereGeometry(0.4, 24, 24);
-    const material = new THREE.MeshStandardMaterial({ color: 0x19297c });
+    const geomentry = new THREE.SphereGeometry(0.3, 50, 50);
+    const material = new THREE.MeshStandardMaterial({ color: 0xd90368 });
     const point = new THREE.Mesh(geomentry, material);
-    point.position.set(pointXYArray[i][0], pointXYArray[i][1], 0);
+    point.position.set(pointXYArray[i][0], pointXYArray[i][1], initialZCord);
     point.name = "point" + i;
     sphereOutOfPoints.add(point);
   }
@@ -74,34 +67,21 @@ const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
 
 makePoints(200, 200, 1500, -100);
 // Needs fix bc trash... why cant this variable be passed with the function ;,)
-let speedAndDirection1 = 0.009;
-let speedAndDirection2 = -0.009;
-const animatePointsZ = function (depth) {
+let speedAndDirection1 = 0.01;
+let speedAndDirection2 = -0.01;
+const animatePointsZ = function () {
+  const t = document.body.getBoundingClientRect().top;
   for (let i = 0; i < sphereOutOfPoints.children.length; i++) {
     if (i % 2 === 0) {
-      if (sphereOutOfPoints.children[i].position.z >= depth) {
-        speedAndDirection1 = -Math.abs(speedAndDirection1);
-      } else if (sphereOutOfPoints.children[i].position.z <= -depth) {
-        speedAndDirection1 = Math.abs(speedAndDirection1);
-      }
-      sphereOutOfPoints.children[i].position.z += speedAndDirection1;
+      sphereOutOfPoints.children[i].position.z = t * speedAndDirection1;
     } else {
-      if (sphereOutOfPoints.children[i].position.z >= depth) {
-        speedAndDirection2 = -Math.abs(speedAndDirection2);
-      } else if (sphereOutOfPoints.children[i].position.z <= -depth) {
-        speedAndDirection2 = Math.abs(speedAndDirection2);
-      }
-      sphereOutOfPoints.children[i].position.z += speedAndDirection2;
+      sphereOutOfPoints.children[i].position.z = t * speedAndDirection2;
     }
   }
+
   /*
-
-
-
   //They are still bc they cancel each other out
   // Current state: cant fix the top row not being aligned right to move and also to move all other half of the dots in reverse.
-
-
 
   for (let i = 0; i < sphereOutOfPoints.children.length / splitter; i++) {
     if (sphereOutOfPoints.children[i * splitter].position.z >= depth) {
@@ -113,18 +93,24 @@ const animatePointsZ = function (depth) {
   }
   */
 };
+// Render initial point positions.
+animatePointsZ();
 
 //
 //  If we want a camera z zoomout we need to set the intial z axis but when we do this the animatePointZ function breaks bc we rely on fixed z=0
 //
+//camera.position.setZ(60);
+//camera.position.setY(10);
+//camera.rotation.x = -0.2;
 camera.position.z = 50;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
   console.log(t);
   camera.position.y = t * -0.02;
-  camera.position.z = t * -0.02;
+  //camera.position.z = t * -0.02;
+  camera.rotation.x = t * -0.0003;
 
-  camera.rotation.x = t * 0.0001;
+  animatePointsZ();
 }
 document.body.onscroll = moveCam;
 
@@ -139,7 +125,6 @@ function onWindowResize() {
 
 function animate() {
   requestAnimationFrame(animate);
-  animatePointsZ(0.5);
   renderer.render(scene, camera);
 }
 
