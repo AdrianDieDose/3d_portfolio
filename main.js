@@ -73,20 +73,37 @@ const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
   }
 };
 
-makePoints(20, 20, 500, -10);
-
-let speedAndDirection = 0.5;
-const animatePointsZ = function (depth) {
-  let multiplicator = 0;
-  const random = Math.floor(Math.random() * sphereOutOfPoints.children.length);
-  for (let i = 0; i < sphereOutOfPoints.children.length; i++) {
-    if (sphereOutOfPoints.children[i].position.z >= depth) {
-      speedAndDirection = -Math.abs(speedAndDirection);
-    } else if (sphereOutOfPoints.children[i].position.z <= -depth) {
-      speedAndDirection = Math.abs(speedAndDirection);
+makePoints(40, 40, 200, -10);
+// Needs fix bc trash... why cant this variable be passed with the function ;,)
+let speedAndDirection1 = 0.05;
+let speedAndDirection2 = -0.05;
+const animatePointsZ = function (depth, splitter) {
+  for (let i = 0; i < sphereOutOfPoints.children.length / splitter; i++) {
+    if (sphereOutOfPoints.children[i * splitter].position.z >= depth) {
+      speedAndDirection1 = -Math.abs(speedAndDirection1);
+    } else if (sphereOutOfPoints.children[i * splitter].position.z <= -depth) {
+      speedAndDirection1 = Math.abs(speedAndDirection1);
     }
-    sphereOutOfPoints.children[i].position.z += speedAndDirection;
+    sphereOutOfPoints.children[i * splitter].position.z += speedAndDirection1;
   }
+  /*
+
+
+
+  //They are still bc they cancel each other out
+  // Current state: cant fix the top row not being aligned right to move and also to move all other half of the dots in reverse..
+
+
+
+  for (let i = 0; i < sphereOutOfPoints.children.length / splitter; i++) {
+    if (sphereOutOfPoints.children[i * splitter].position.z >= depth) {
+      speedAndDirection2 = -Math.abs(speedAndDirection2);
+    } else if (sphereOutOfPoints.children[i * splitter].position.z <= -depth) {
+      speedAndDirection2 = Math.abs(speedAndDirection2);
+    }
+    sphereOutOfPoints.children[i * splitter].position.z += speedAndDirection2;
+  }
+  */
 };
 
 /*
@@ -104,7 +121,7 @@ const dir = document.body.scrollTop;
 
 function animate() {
   requestAnimationFrame(animate);
-  animatePointsZ(5);
+  animatePointsZ(0.5, 4);
   renderer.render(scene, camera);
 }
 
