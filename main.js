@@ -22,8 +22,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.render(scene, camera);
 
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(20, 20, 20);
-
+pointLight.position.set(0, 0, 10);
+pointLight.name = "pointLight";
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
 scene.add(pointLight);
@@ -54,7 +54,7 @@ const calcSpaces = function (planeHeight, planeWidth, nPoints, offset) {
 
 const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
   const pointXYArray = calcSpaces(planeHeight, planeWidth, nPoints, offset);
-  const initialZCord = 50;
+  const initialZCord = -30;
   for (let i = 0; i < pointXYArray.length; i++) {
     const geomentry = new THREE.SphereGeometry(0.3, 50, 50);
     const material = new THREE.MeshStandardMaterial({ color: 0xd90368 });
@@ -67,16 +67,11 @@ const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
 
 makePoints(200, 200, 1500, -100);
 // Needs fix bc trash... why cant this variable be passed with the function ;,)
-let speedAndDirection1 = 0.01;
-let speedAndDirection2 = -0.01;
+let speedAndDirection = -0.02;
 const animatePointsZ = function () {
   const t = document.body.getBoundingClientRect().top;
   for (let i = 0; i < sphereOutOfPoints.children.length; i++) {
-    if (i % 2 === 0) {
-      sphereOutOfPoints.children[i].position.z = t * speedAndDirection1;
-    } else {
-      sphereOutOfPoints.children[i].position.z = t * speedAndDirection2;
-    }
+    sphereOutOfPoints.children[i].position.z = t * speedAndDirection;
   }
 
   /*
@@ -106,9 +101,10 @@ camera.position.z = 50;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
   console.log(t);
-  camera.position.y = t * -0.02;
+  //camera.position.y = t * -0.02;
   //camera.position.z = t * -0.02;
-  camera.rotation.x = t * -0.0003;
+  //camera.rotation.x = t * -0.0001;
+  pointLight.position.z = t * 1;
 
   animatePointsZ();
 }
