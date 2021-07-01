@@ -1,7 +1,6 @@
 import "./style.css";
 
 import * as THREE from "three";
-import { MathUtils } from "three";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -21,93 +20,74 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 renderer.render(scene, camera);
 
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(0, 0, 10);
-pointLight.name = "pointLight";
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
-scene.add(pointLight);
 scene.add(ambientLight);
 
 const gridHelper = new THREE.GridHelper(200, 50);
 //scene.add(gridHelper);
 
-//Placeholder for time being for pinning out all points ... need fix
-const geomentry = new THREE.PlaneGeometry(0, 0);
-const material = new THREE.MeshStandardMaterial({});
-const sphereOutOfPoints = new THREE.Mesh(geomentry, material);
-sphereOutOfPoints.name = "pointsSphere";
-scene.add(sphereOutOfPoints);
-
-const calcSpaces = function (planeHeight, planeWidth, nPoints, offset) {
+const calcSpaces = function (
+  planeHeight,
+  planeWidth,
+  nPoints,
+  offsetX,
+  offsetY
+) {
   const totalArea = planeWidth * planeHeight;
   const pointArea = totalArea / nPoints;
   const length = Math.sqrt(pointArea);
   const xy = [];
+  offsetX *= -1;
+  offsetY *= -1;
   for (let i = length / 2; i < planeWidth; i += length) {
     for (let j = length / 2; j < planeHeight; j += length) {
-      let buffer = [i + offset, j + offset];
+      let buffer = [i + offsetX, j + offsetY];
       xy.push(buffer);
     }
   }
   return xy;
 };
 
-const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
-  const pointXYArray = calcSpaces(planeHeight, planeWidth, nPoints, offset);
+const allPointsGroup = new THREE.Group();
+
+const makePoints = function (planeHeight, planeWidth, nPoints, pointSize) {
+  const pointXYArray = calcSpaces(
+    planeHeight,
+    planeWidth,
+    nPoints,
+    planeWidth / 2,
+    planeHeight / 4
+  );
   const initialZCord = -30;
   for (let i = 0; i < pointXYArray.length; i++) {
-    const geomentry = new THREE.SphereGeometry(0.3, 50, 50);
+    const geomentry = new THREE.SphereGeometry(pointSize, 50, 50);
     const material = new THREE.MeshStandardMaterial({ color: 0xd90368 });
     const point = new THREE.Mesh(geomentry, material);
     point.position.set(pointXYArray[i][0], pointXYArray[i][1], initialZCord);
     point.name = "point" + i;
-    sphereOutOfPoints.add(point);
+    allPointsGroup.add(point);
+  }
+  scene.add(allPointsGroup);
+};
+
+makePoints(1050, 2000, 5500, 1);
+
+//Experimental.... does not work yet
+const animateZPoints = function () {
+  for (let i = 0; i < allPointsGroup.children.length; i++) {
+    allPointsGroup.children[i].position.z += 0.1;
+    //console.log(allPointsGroup.children[i].position.z);
   }
 };
 
-makePoints(300, 300, 1500, -150);
-// Needs fix bc trash... why cant this variable be passed with the function ;,)
-let speedAndDirection = -0.018;
-const animatePointsZ = function () {
-  const t = document.body.getBoundingClientRect().top;
-  for (let i = 0; i < sphereOutOfPoints.children.length; i++) {
-    sphereOutOfPoints.children[i].position.z = t * speedAndDirection;
-  }
-
-  /*
-  //They are still bc they cancel each other out
-  // Current state: cant fix the top row not being aligned right to move and also to move all other half of the dots in reverse.
-
-  for (let i = 0; i < sphereOutOfPoints.children.length / splitter; i++) {
-    if (sphereOutOfPoints.children[i * splitter].position.z >= depth) {
-      speedAndDirection2 = -Math.abs(speedAndDirection2);
-    } else if (sphereOutOfPoints.children[i * splitter].position.z <= -depth) {
-      speedAndDirection2 = Math.abs(speedAndDirection2);
-    }
-    sphereOutOfPoints.children[i * splitter].position.z += speedAndDirection2;
-  }
-  */
-};
-// Render initial point positions.
-animatePointsZ();
-
-//
-//  If we want a camera z zoomout we need to set the intial z axis but when we do this the animatePointZ function breaks bc we rely on fixed z=0
-//
+camera.rotation.x = 0.8;
 camera.position.setX(0.8);
-//camera.position.setY(-30);
-//camera.rotation.x = -0.2;
 camera.position.z = 50;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
-  console.log(t);
-  //camera.position.y = t * -0.02;
-  //camera.position.z = t * -0.02;
-  camera.rotation.x = t * -0.0005;
-  pointLight.position.z = t * 1;
-
-  animatePointsZ();
+  camera.position.y = t * 0.05;
+  //camera.rotation.x = t * -0.0005;
 }
 document.body.onscroll = moveCam;
 
@@ -119,10 +99,17 @@ function onWindowResize() {
   camera.aspect = _width / _height;
   console.log("- resize -");
 }
-
+console.log(allPointsGroup);
 function animate() {
+  // animateZPoints();
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
+  allPointsGroup.position.x += 0.5;
+
+  // Maybe bit rough
+  if (allPointsGroup.position.x >= 20) {
+    allPointsGroup.position.x = 0;
+  }
 }
 
 animate();
