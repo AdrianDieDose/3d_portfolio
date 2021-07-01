@@ -27,6 +27,7 @@ pointLight.name = "pointLight";
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
 scene.add(pointLight);
+scene.add(ambientLight);
 
 const gridHelper = new THREE.GridHelper(200, 50);
 //scene.add(gridHelper);
@@ -65,9 +66,9 @@ const makePoints = function (planeHeight, planeWidth, nPoints, offset) {
   }
 };
 
-makePoints(200, 200, 1500, -100);
+makePoints(300, 300, 1500, -150);
 // Needs fix bc trash... why cant this variable be passed with the function ;,)
-let speedAndDirection = -0.02;
+let speedAndDirection = -0.018;
 const animatePointsZ = function () {
   const t = document.body.getBoundingClientRect().top;
   for (let i = 0; i < sphereOutOfPoints.children.length; i++) {
@@ -94,8 +95,8 @@ animatePointsZ();
 //
 //  If we want a camera z zoomout we need to set the intial z axis but when we do this the animatePointZ function breaks bc we rely on fixed z=0
 //
-//camera.position.setZ(60);
-//camera.position.setY(10);
+camera.position.setX(0.8);
+//camera.position.setY(-30);
 //camera.rotation.x = -0.2;
 camera.position.z = 50;
 function moveCam() {
@@ -103,7 +104,7 @@ function moveCam() {
   console.log(t);
   //camera.position.y = t * -0.02;
   //camera.position.z = t * -0.02;
-  //camera.rotation.x = t * -0.0001;
+  camera.rotation.x = t * -0.0005;
   pointLight.position.z = t * 1;
 
   animatePointsZ();
