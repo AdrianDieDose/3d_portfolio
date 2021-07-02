@@ -20,9 +20,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 renderer.render(scene, camera);
 
+const pointLight = new THREE.PointLight(0xd90368, 5, 500);
+scene.add(pointLight);
+
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
-scene.add(ambientLight);
+//scene.add(ambientLight);
 
 const gridHelper = new THREE.GridHelper(200, 50);
 //scene.add(gridHelper);
@@ -62,7 +65,7 @@ const makePoints = function (planeHeight, planeWidth, nPoints, pointSize) {
   const initialZCord = -30;
   for (let i = 0; i < pointXYArray.length; i++) {
     const geomentry = new THREE.SphereGeometry(pointSize, 50, 50);
-    const material = new THREE.MeshStandardMaterial({ color: 0xd90368 });
+    const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
     const point = new THREE.Mesh(geomentry, material);
     point.position.set(pointXYArray[i][0], pointXYArray[i][1], initialZCord);
     point.name = "point" + i;
@@ -84,12 +87,33 @@ const animateZPoints = function () {
 camera.rotation.x = 0.8;
 camera.position.setX(0.8);
 camera.position.z = 50;
+pointLight.position.z = 100;
+pointLight.position.y = 10;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
   camera.position.y = t * 0.05;
+  pointLight.position.z = t * -0.15;
   //camera.rotation.x = t * -0.0005;
 }
 document.body.onscroll = moveCam;
+
+document.querySelector(".glow-on-hover").onclick = function () {
+  scrollButton();
+};
+
+let backgroundOnOrOff = true;
+function scrollButton() {
+  if (
+    document.querySelector(".glow-on-hover").textContent == "Stop background"
+  ) {
+    backgroundOnOrOff = false;
+    document.querySelector(".glow-on-hover").textContent = "Start background";
+  } else {
+    backgroundOnOrOff = true;
+
+    document.querySelector(".glow-on-hover").textContent = "Stop background";
+  }
+}
 
 // Window rezize fix needed !
 function onWindowResize() {
@@ -104,7 +128,10 @@ function animate() {
   // animateZPoints();
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
-  allPointsGroup.position.x += 0.5;
+
+  if (backgroundOnOrOff) {
+    allPointsGroup.position.x += 0.5;
+  }
 
   // Maybe bit rough
   if (allPointsGroup.position.x >= 20) {
