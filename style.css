@@ -1,7 +1,28 @@
+@font-face {
+  font-family: VPixel;
+  src: url(./font/VPPixel-Simplified.otf) format("opentype");
+}
+
+h1 {
+  font-family: VPixel;
+  color: #eee;
+  font-size: 1em;
+  line-height: 1;
+  text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
+  letter-spacing: 0.125em;
+  animation-duration: 0.01s;
+  animation-name: textflicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+
+  padding-top: 30vh;
+}
+
 canvas {
   position: fixed;
   top: 0;
   left: 0;
+  filter: blur(5px);
 }
 
 main {
@@ -10,9 +31,6 @@ main {
   z-index: 99;
   position: absolute;
   width: 100%;
-  margin: 0px auto;
-  padding: 120px 0px;
-
   display: grid;
   grid-template-columns: repeat(12, 1fr);
 }
@@ -21,7 +39,7 @@ h1,
 h2,
 h3,
 blockquote {
-  font-family: elevon, sans-serif;
+  font-family: VPixel, elevon, sans-serif;
   font-weight: 700;
   font-style: normal;
 }
@@ -33,17 +51,17 @@ canvas {
 }
 
 header {
-  background: var(--dark-bg);
-  grid-column: 2 / span 5;
-  font-size: 2.5rem;
-  padding: 2rem;
+  grid-column: 2 / span 9;
+  height: 100vh;
+  font-size: 3rem;
   margin-bottom: var(--spacing);
 }
 
-section {
-  grid-column: 2 / 8;
-  padding: 1rem;
-  background: var(--dark-bg);
+.paragraphs {
+  opacity: 100%;
+  grid-column: 2 / span 6;
+  padding: 1em;
+  background: #111;
   font-size: 1.25rem;
   line-height: 1.5;
   margin-bottom: var(--spacing);
@@ -57,9 +75,8 @@ blockquote {
 }
 
 blockquote p {
-  color: black;
-  background-color: white;
-  font-size: 4rem;
+  color: white;
+  font-size: 2rem;
   display: inline;
   line-height: 1;
 }
@@ -73,6 +90,7 @@ blockquote p {
 }
 
 .glow-on-hover {
+  margin-top: 100px;
   font-weight: 600;
   font-family: elevon, sans-serif;
   grid-column: 11;
@@ -145,5 +163,14 @@ blockquote p {
   }
   100% {
     background-position: 0 0;
+  }
+}
+
+@keyframes textflicker {
+  from {
+    text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
+  }
+  to {
+    text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
   }
 }
