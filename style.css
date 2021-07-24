@@ -3,21 +3,6 @@
   src: url(./font/VPPixel-Simplified.otf) format("opentype");
 }
 
-h1 {
-  font-family: VPixel;
-  color: #eee;
-  font-size: 1em;
-  line-height: 1;
-  text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
-  letter-spacing: 0.125em;
-  animation-duration: 0.01s;
-  animation-name: textflicker;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-
-  padding-top: 30vh;
-}
-
 canvas {
   position: fixed;
   top: 0;
@@ -33,6 +18,7 @@ main {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 22vh 180vh 100vh 100vh;
 }
 
 h1,
@@ -44,17 +30,49 @@ blockquote {
   font-style: normal;
 }
 
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
 header {
-  grid-column: 2 / span 9;
-  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column: 1 / span 12;
   font-size: 3rem;
   margin-bottom: var(--spacing);
+  justify-items: center;
+  align-items: center;
+}
+
+#first {
+  grid-column: 2 / span 3;
+}
+
+#secound {
+  grid-column: 2 / span 3;
+  grid-row: 3;
+}
+
+.tv-overlay {
+  position: fixed;
+  width: 60%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  /* The tv need a turn off bc causes lagg */
+}
+
+.tv-animation {
+  font-family: VPixel;
+  color: #eee;
+  font-size: 1.2em;
+  line-height: 1;
+  text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
+  letter-spacing: 0.125em;
+  animation-duration: 0.01s;
+  animation-name: textflicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  padding: 0px 20%;
 }
 
 .paragraphs {
