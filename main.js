@@ -16,7 +16,9 @@ const renderer = new THREE.WebGL1Renderer({
   canvas: document.querySelector("#bg"),
 });
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
+
+const tvImage = document.getElementsByClassName("tv-overlay")[0];
+renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.6);
 
 renderer.render(scene, camera);
 
@@ -84,9 +86,9 @@ const animateZPoints = function () {
   }
 };
 
-camera.rotation.x = 0.8;
+camera.rotation.x = 1;
 camera.position.setX(0.8);
-camera.position.z = 50;
+camera.position.z = 20;
 pointLight.position.z = 100;
 pointLight.position.y = 10;
 function moveCam() {
@@ -117,13 +119,12 @@ function scrollButton() {
 
 // Window rezize fix needed !
 function onWindowResize() {
-  _width = window.innerWidth;
-  _height = window.innerHeight;
-  renderer.setSize(_width, _height);
-  camera.aspect = _width / _height;
-  console.log("- resize -");
+  const tvImage = document.getElementsByClassName("tv-overlay")[0];
+  renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.6);
+  console.log("- resized -");
 }
-console.log(allPointsGroup);
+document.body.onresize = onWindowResize;
+
 function animate() {
   // animateZPoints();
   requestAnimationFrame(animate);
