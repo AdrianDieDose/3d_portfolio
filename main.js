@@ -19,19 +19,21 @@ renderer.setPixelRatio(window.devicePixelRatio);
 
 const tvImage = document.getElementsByClassName("tv-overlay")[0];
 renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.6);
+document.getElementsByClassName("tv-text")[0].style.height =
+  tvImage.clientHeight * 0.6 + "px";
 
 renderer.render(scene, camera);
 
-const pointLight = new THREE.PointLight(0xd90368, 5, 500);
+const pointLight = new THREE.PointLight(0xd90368, 10, 500);
 scene.add(pointLight);
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
-
 //scene.add(ambientLight);
 
 const gridHelper = new THREE.GridHelper(200, 50);
 //scene.add(gridHelper);
 
+// CALCULATES AND RENDERS POINTS
 const calcSpaces = function (
   planeHeight,
   planeWidth,
@@ -76,7 +78,8 @@ const makePoints = function (planeHeight, planeWidth, nPoints, pointSize) {
   scene.add(allPointsGroup);
 };
 
-makePoints(1050, 2000, 5500, 1);
+// Needs loop fix....
+makePoints(1050, 400, 1000, 1);
 
 //Experimental.... does not work yet
 const animateZPoints = function () {
@@ -86,19 +89,22 @@ const animateZPoints = function () {
   }
 };
 
-camera.rotation.x = 1;
+// Camera hard coded values
+camera.rotation.x = 1.7;
 camera.position.setX(0.8);
-camera.position.z = 20;
+camera.position.z = 0;
+// Point light hard coded values
 pointLight.position.z = 100;
-pointLight.position.y = 10;
+pointLight.position.y = -200;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
-  camera.position.y = t * 0.05;
-  pointLight.position.z = t * -0.15;
+  camera.position.y = t * 0.04;
+  pointLight.position.z = t * -0.5;
   //camera.rotation.x = t * -0.0005;
 }
 document.body.onscroll = moveCam;
 
+// Background ON/OFF Button
 document.querySelector(".glow-on-hover").onclick = function () {
   scrollButton();
 };
@@ -117,10 +123,11 @@ function scrollButton() {
   }
 }
 
-// Window rezize fix needed !
 function onWindowResize() {
   const tvImage = document.getElementsByClassName("tv-overlay")[0];
   renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.6);
+  document.getElementsByClassName("tv-text")[0].style.height =
+    tvImage.clientHeight * 0.6 + "px";
   console.log("- resized -");
 }
 document.body.onresize = onWindowResize;
