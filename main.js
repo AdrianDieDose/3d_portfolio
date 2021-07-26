@@ -17,10 +17,13 @@ const renderer = new THREE.WebGL1Renderer({
 });
 renderer.setPixelRatio(window.devicePixelRatio);
 
+// SETS ALL FRONT PAGE SIZES
 const tvImage = document.getElementsByClassName("tv-overlay")[0];
-renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.6);
+renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
 document.getElementsByClassName("tv-text")[0].style.height =
-  tvImage.clientHeight * 0.6 + "px";
+  tvImage.clientHeight * 0.63 + "px";
+document.getElementsByClassName("tv-text")[0].style.width =
+  tvImage.clientWidth * 0.7 + "px";
 
 renderer.render(scene, camera);
 
@@ -79,7 +82,7 @@ const makePoints = function (planeHeight, planeWidth, nPoints, pointSize) {
 };
 
 // Needs loop fix....
-makePoints(1050, 400, 1000, 1);
+makePoints(1050, 800, 2100, 1);
 
 //Experimental.... does not work yet
 const animateZPoints = function () {
@@ -98,8 +101,11 @@ pointLight.position.z = 100;
 pointLight.position.y = -200;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
-  camera.position.y = t * 0.04;
-  pointLight.position.z = t * -0.5;
+  console.log(t);
+  if (t >= -1000) {
+    camera.position.y = t * 0.05;
+  }
+  //pointLight.position.z = t * -0.5;
   //camera.rotation.x = t * -0.0005;
 }
 document.body.onscroll = moveCam;
@@ -123,14 +129,73 @@ function scrollButton() {
   }
 }
 
+// NEED SCROLL AND REZIZE FIX!!!!
+
+// Resize function
 function onWindowResize() {
   const tvImage = document.getElementsByClassName("tv-overlay")[0];
-  renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.6);
+  renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
   document.getElementsByClassName("tv-text")[0].style.height =
-    tvImage.clientHeight * 0.6 + "px";
+    tvImage.clientHeight * 0.63 + "px";
+  document.getElementsByClassName("tv-text")[0].style.width =
+    tvImage.clientWidth * 0.7 + "px";
   console.log("- resized -");
 }
 document.body.onresize = onWindowResize;
+
+// Scroll animation
+// Add opacity ?
+// Speed up scroll?
+const paddingBottomCanvas = 0.25;
+const paddingBottomText = 0.3;
+const scrollLength = 1000;
+const scrollSpeed = 2;
+function changeCss() {
+  if (this.scrollY >= scrollLength) {
+    document.getElementById("bg").style.paddingBottom =
+      this.scrollY +
+      parseInt(document.getElementById("bg").style.height) *
+        paddingBottomCanvas -
+      scrollLength +
+      "px";
+    document.getElementsByClassName("tv-text")[0].style.paddingBottom =
+      this.scrollY +
+      parseInt(document.getElementsByClassName("tv-text")[0].style.height) *
+        paddingBottomText -
+      scrollLength +
+      "px";
+
+    document.getElementsByClassName("tv-overlay")[0].style.paddingBottom =
+      this.scrollY - scrollLength + "px";
+  } else {
+  }
+}
+window.addEventListener("scroll", changeCss, false);
+
+function init() {
+  document.getElementById("bg").style.paddingBottom =
+    parseInt(document.getElementById("bg").style.height) * paddingBottomCanvas +
+    "px";
+  document.getElementsByClassName("tv-text")[0].style.paddingBottom =
+    parseInt(document.getElementsByClassName("tv-text")[0].style.height) *
+      paddingBottomText +
+    "px";
+}
+init();
+
+function blinkToggle() {
+  if (
+    document.getElementsByClassName("tv-animation")[0].innerHTML ==
+    "I like making stuff and putting it on the internet.I"
+  ) {
+    document.getElementsByClassName("tv-animation")[0].innerHTML =
+      "I like making stuff and putting it on the internet.";
+  } else {
+    document.getElementsByClassName("tv-animation")[0].innerHTML =
+      "I like making stuff and putting it on the internet.I";
+  }
+}
+setInterval(blinkToggle, 800);
 
 function animate() {
   // animateZPoints();

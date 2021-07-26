@@ -6,6 +6,9 @@
 html {
   background-color: black;
 }
+body {
+  margin: 0;
+}
 
 canvas {
   position: fixed;
@@ -15,8 +18,7 @@ canvas {
   left: 0;
   right: 0;
   margin: auto;
-  filter: blur(3px);
-  padding-bottom: 11%;
+  filter: blur(1px);
   z-index: 1;
 }
 
@@ -28,7 +30,7 @@ main {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 150vh 100vh 100vh;
+  grid-template-rows: 250vh 100vh 100vh;
   left: 0;
   top: 0;
 }
@@ -42,33 +44,30 @@ blockquote {
   font-style: normal;
 }
 
-header {
+.tv-text {
   position: fixed;
-  width: 60%;
+  display: grid;
+  grid-template-rows: 1fr;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   margin: auto;
-  font-size: 3rem;
   justify-items: center;
   align-items: center;
-  padding-bottom: 10%;
   overflow: hidden;
 }
 
 #first {
-  grid-column: 2 / span 3;
+  width: 100%;
 }
 
 #secound {
-  grid-column: 2 / span 3;
-  grid-row: 2;
 }
 
 .tv-overlay {
   position: fixed;
-  width: 60%;
+  width: 30%;
   top: 0;
   bottom: 0;
   left: 0;
@@ -82,7 +81,7 @@ header {
 .tv-animation {
   font-family: VPixel;
   color: #eee;
-  font-size: 1em;
+  font-size: 2vw;
   line-height: 1;
   text-shadow: 0.06rem 0 0.06rem #ea36af, -0.125rem 0 0.06rem #75fa69;
   letter-spacing: 0.125em;
@@ -90,33 +89,7 @@ header {
   animation-name: textflicker;
   animation-iteration-count: infinite;
   animation-direction: alternate;
-  padding: 0px 20%;
-}
-
-#tv-cutout {
-  position: fixed;
-  width: 10vw;
-  height: 10vh;
-  background-color: transparent;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  z-index: 1;
-}
-
-#tv-cutout::before {
-  content: "";
-  position: fixed;
-  width: 700px;
-  height: 750px;
-  box-shadow: 0px 0px 0px 100vw black;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
+  padding-bottom: 20%;
 }
 
 .paragraphs {
