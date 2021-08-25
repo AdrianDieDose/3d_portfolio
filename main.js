@@ -19,16 +19,15 @@ const renderer = new THREE.WebGL1Renderer({
 //renderer.setPixelRatio(window.devicePixelRatio);
 
 // SETS ALL FRONT PAGE SIZES
+
+renderer.render(scene, camera);
+
 const tvImage = document.getElementsByClassName("tv-overlay")[0];
 renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
 document.getElementsByClassName("tv-text")[0].style.height =
   tvImage.clientHeight * 0.63 + "px";
 document.getElementsByClassName("tv-text")[0].style.width =
   tvImage.clientWidth * 0.7 + "px";
-
-
-
-renderer.render(scene, camera);
 
 const pointLight = new THREE.PointLight(0xd90368, 10, 500);
 scene.add(pointLight);
