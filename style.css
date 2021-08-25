@@ -23,7 +23,7 @@ canvas {
 }
 
 main {
-  width: 100%;
+  width: 100vh;
   color: white;
   z-index: 99;
   position: absolute;
