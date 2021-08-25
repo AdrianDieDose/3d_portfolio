@@ -4,7 +4,7 @@
 }
 
 html {
-  background-color: black;
+  background-color: #141414;
 }
 body {
   margin: 0;
@@ -27,7 +27,6 @@ main {
   color: white;
   z-index: 99;
   position: absolute;
-  width: 100%;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 250vh 100vh 100vh;
@@ -39,9 +38,14 @@ h1,
 h2,
 h3,
 blockquote {
-  font-family: VPixel, elevon, sans-serif;
+  font-family: elevon, sans-serif;
   font-weight: 700;
   font-style: normal;
+  font-size: 3rem;
+}
+
+h3 {
+  font-size: 2.5rem;
 }
 
 .tv-text {
@@ -94,12 +98,20 @@ blockquote {
 
 .paragraphs {
   opacity: 100%;
-  grid-column: 2 / span 6;
-  grid-row: 2;
-  padding: 1em;
-  background: #111;
+  grid-column: 1 / span 12;
+  grid-row: 2 / span 3;
+  background: #141414;
   font-size: 1.25rem;
   line-height: 1.5;
+  border-top: 20px solid purple;
+  border-bottom: 20px solid purple;
+
+  padding: 0rem 10% 0rem 10%;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
 }
 
 blockquote {
@@ -116,8 +128,38 @@ blockquote p {
   line-height: 1;
 }
 
-.left {
-  grid-column: 6 / 12;
+.sec1 {
+  grid-column: 1 / 2;
+}
+
+.img1 {
+  grid-column: 2 / 3;
+  grid-row: 1;
+  margin: auto;
+  background: black;
+}
+
+.img2 {
+  grid-column: 1 / 2;
+  grid-row: 2;
+  margin: auto;
+  background: black;
+}
+
+.img3 {
+  grid-column: 2 / 3;
+  margin: auto;
+  background: black;
+}
+
+.sec2 {
+  grid-column: 2 / 3;
+  grid-row: 2;
+}
+
+.sec3 {
+  grid-column: 1 / 2;
+  grid-row: 3;
 }
 
 #stopBg {

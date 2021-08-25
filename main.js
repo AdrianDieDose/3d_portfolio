@@ -148,7 +148,7 @@ document.body.onresize = onWindowResize;
 // Speed up scroll?
 const paddingBottomCanvas = 0.25;
 const paddingBottomText = 0.3;
-const scrollLength = 1000;
+const scrollLength = 400;
 const scrollSpeed = 2;
 function changeCss() {
   if (this.scrollY >= scrollLength) {
