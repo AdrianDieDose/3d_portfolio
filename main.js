@@ -144,7 +144,7 @@ const loadImage = (src) =>
   new Promise((resolve, reject) => {
     let tvImage = document.getElementsByClassName("tv-overlay")[0];
 
-    tvImage.onload = () => resolve(tvImage);
+    tvImage.onload = () => resolve(loadImage);
     tvImage.onerror = reject;
     tvImage.src = src;
   });
