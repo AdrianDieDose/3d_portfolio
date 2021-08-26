@@ -77,7 +77,6 @@ const makePoints = function (planeHeight, planeWidth, nPoints, pointSize) {
 };
 
 // Needs loop fix....
-makePoints(1050, 800, 2100, 1);
 
 //Experimental.... does not work yet
 const animateZPoints = function () {
@@ -125,16 +124,18 @@ function scrollButton() {
 }
 
 // NEED SCROLL AND REZIZE FIX!!!!
+// Still glitched when scriolling down
 
 // Scroll animation
 // Add opacity ?
 // Speed up scroll?
-const paddingBottomCanvas = 0.2;
+const paddingBottomCanvas = 0.4;
 const paddingBottomText = 0.0;
-const scrollLength = 1000;
+const scrollLength = 800;
 const scrollSpeed = 2;
 let tvText = document.getElementsByClassName("tv-text")[0];
 let canvas = document.getElementById("bg");
+const tvImage = document.getElementsByClassName("tv-overlay")[0];
 
 let y = renderer.getSize().y;
 
@@ -149,14 +150,13 @@ const loadImage = (src) =>
   });
 
 // Loads image and then executes onWindowRezize to fix on load hight bug
-loadImage("./pictures/crt.png").then(onWindowResize);
-
-const tvImage = document.getElementsByClassName("tv-overlay")[0];
+loadImage("./pictures/crt.png").then(onWindowResize).then(init);
 
 function init() {
   //On load
 
   canvas.style.paddingBottom = y * paddingBottomCanvas + "px";
+  makePoints(1050, 800, 2100, 1);
 }
 
 // Resize function
