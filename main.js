@@ -20,13 +20,6 @@ const renderer = new THREE.WebGLRenderer({
 
 // SETS ALL FRONT PAGE SIZES
 
-const tvImage = document.getElementsByClassName("tv-overlay")[0];
-renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
-document.getElementsByClassName("tv-text")[0].style.height =
-  tvImage.clientHeight * 0.63 + "px";
-document.getElementsByClassName("tv-text")[0].style.width =
-  tvImage.clientWidth * 0.7 + "px";
-
 renderer.render(scene, camera);
 
 const pointLight = new THREE.PointLight(0xd90368, 10, 500);
@@ -103,7 +96,7 @@ pointLight.position.z = 100;
 pointLight.position.y = -200;
 function moveCam() {
   const t = document.body.getBoundingClientRect().top;
-  console.log(t);
+  //console.log(t);
   if (t >= -1000) {
     camera.position.y = t * 0.05;
   }
@@ -133,57 +126,67 @@ function scrollButton() {
 
 // NEED SCROLL AND REZIZE FIX!!!!
 
-// Resize function
-function onWindowResize() {
-  const tvImage = document.getElementsByClassName("tv-overlay")[0];
-  renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
-  document.getElementsByClassName("tv-text")[0].style.height =
-    tvImage.clientHeight * 0.63 + "px";
-  document.getElementsByClassName("tv-text")[0].style.width =
-    tvImage.clientWidth * 0.7 + "px";
-  console.log("- resized -");
-}
-document.body.onresize = onWindowResize;
-
 // Scroll animation
 // Add opacity ?
 // Speed up scroll?
 const paddingBottomCanvas = 0.2;
-const paddingBottomText = 0.2;
+const paddingBottomText = 0.0;
 const scrollLength = 1000;
 const scrollSpeed = 2;
-function changeCss() {
-  if (this.scrollY >= scrollLength) {
-    document.getElementById("bg").style.paddingBottom =
-      this.scrollY +
-      parseInt(document.getElementById("bg").style.height) *
-        paddingBottomCanvas -
-      scrollLength +
-      "px";
-    document.getElementsByClassName("tv-text")[0].style.paddingBottom =
-      this.scrollY +
-      parseInt(document.getElementsByClassName("tv-text")[0].style.height) *
-        paddingBottomText -
-      scrollLength +
-      "px";
+let tvText = document.getElementsByClassName("tv-text")[0];
+let canvas = document.getElementById("bg");
 
-    document.getElementsByClassName("tv-overlay")[0].style.paddingBottom =
-      this.scrollY - scrollLength + "px";
-  } else {
-  }
-}
-window.addEventListener("scroll", changeCss, false);
+let y = renderer.getSize().y;
+
+// Wait for crt image
+const loadImage = (src) =>
+  new Promise((resolve, reject) => {
+    let tvImage = document.getElementsByClassName("tv-overlay")[0];
+
+    tvImage.onload = () => resolve(tvImage);
+    tvImage.onerror = reject;
+    tvImage.src = src;
+  });
+
+// Loads image and then executes onWindowRezize to fix on load hight bug
+loadImage("./pictures/crt.png").then(onWindowResize);
+
+const tvImage = document.getElementsByClassName("tv-overlay")[0];
 
 function init() {
-  document.getElementById("bg").style.paddingBottom =
-    parseInt(document.getElementById("bg").style.height) * paddingBottomCanvas +
-    "px";
-  document.getElementsByClassName("tv-text")[0].style.paddingBottom =
-    parseInt(document.getElementsByClassName("tv-text")[0].style.height) *
-      paddingBottomText +
-    "px";
+  //On load
+
+  canvas.style.paddingBottom = y * paddingBottomCanvas + "px";
 }
-init();
+
+// Resize function
+function onWindowResize() {
+  console.log(tvImage.clientHeight * 0.63);
+
+  let tvText = document.getElementsByClassName("tv-text")[0];
+  renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
+
+  tvText.style.height = tvImage.clientHeight * 0.63 + "px";
+  tvText.style.width = tvImage.clientWidth * 0.7 + "px";
+  console.log("- resized -");
+}
+document.body.onresize = onWindowResize;
+
+function changeCss() {
+  if (this.scrollY >= scrollLength) {
+    canvas.style.paddingBottom =
+      this.scrollY + y * paddingBottomCanvas - scrollLength + "px";
+    tvText.style.paddingBottom =
+      this.scrollY +
+      parseInt(tvText.style.height) * paddingBottomText -
+      scrollLength +
+      "px";
+
+    tvImage.style.paddingBottom = this.scrollY - scrollLength + "px";
+  }
+}
+
+window.addEventListener("scroll", changeCss, false);
 
 function blinkToggle() {
   if (
