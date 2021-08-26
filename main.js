@@ -137,7 +137,7 @@ let tvText = document.getElementsByClassName("tv-text")[0];
 let canvas = document.getElementById("bg");
 const tvImage = document.getElementsByClassName("tv-overlay")[0];
 
-let y = renderer.getSize().y;
+let y = canvas.style.height;
 
 // Wait for crt image
 const loadImage = (src) =>
