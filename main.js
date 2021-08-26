@@ -144,7 +144,7 @@ const loadImage = (src) =>
   new Promise((resolve, reject) => {
     let tvImage = document.getElementsByClassName("tv-overlay")[0];
 
-    tvImage.onload = () => resolve(loadImage);
+    tvImage.onload = () => resolve(tvImage);
     tvImage.onerror = reject;
     tvImage.src = src;
   });
@@ -154,7 +154,6 @@ loadImage("./pictures/crt.png").then(onWindowResize).then(init);
 
 function init() {
   //On load
-
   canvas.style.paddingBottom = y * paddingBottomCanvas + "px";
   makePoints(1050, 800, 2100, 1);
 }
