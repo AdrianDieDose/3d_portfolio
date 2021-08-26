@@ -140,17 +140,11 @@ const tvImage = document.getElementsByClassName("tv-overlay")[0];
 let y = renderer.getSize().y;
 
 // Wait for crt image
-const loadImage = (src) =>
-  new Promise((resolve, reject) => {
-    let tvImage = document.getElementsByClassName("tv-overlay")[0];
-
-    tvImage.onload = () => resolve(tvImage);
-    tvImage.onerror = reject;
-    tvImage.src = src;
-  });
 
 // Loads image and then executes onWindowRezize to fix on load hight bug
-loadImage("./pictures/crt.png").then(onWindowResize).then(init);
+
+onWindowResize();
+init();
 
 function init() {
   //On load
