@@ -20,14 +20,14 @@ const renderer = new THREE.WebGL1Renderer({
 
 // SETS ALL FRONT PAGE SIZES
 
-renderer.render(scene, camera);
-
 const tvImage = document.getElementsByClassName("tv-overlay")[0];
 renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
 document.getElementsByClassName("tv-text")[0].style.height =
   tvImage.clientHeight * 0.63 + "px";
 document.getElementsByClassName("tv-text")[0].style.width =
   tvImage.clientWidth * 0.7 + "px";
+
+renderer.render(scene, camera);
 
 const pointLight = new THREE.PointLight(0xd90368, 10, 500);
 scene.add(pointLight);
@@ -148,9 +148,9 @@ document.body.onresize = onWindowResize;
 // Scroll animation
 // Add opacity ?
 // Speed up scroll?
-const paddingBottomCanvas = 0.25;
-const paddingBottomText = 0.3;
-const scrollLength = 400;
+const paddingBottomCanvas = 0.2;
+const paddingBottomText = 0.2;
+const scrollLength = 1000;
 const scrollSpeed = 2;
 function changeCss() {
   if (this.scrollY >= scrollLength) {
