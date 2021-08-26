@@ -137,9 +137,8 @@ let tvText = document.getElementsByClassName("tv-text")[0];
 let canvas = document.getElementById("bg");
 const tvImage = document.getElementsByClassName("tv-overlay")[0];
 
-let y = canvas.style.height;
-
 // Wait for crt image
+/*
 const loadImage = (src) =>
   new Promise((resolve, reject) => {
     let tvImage = document.getElementsByClassName("tv-overlay")[0];
@@ -151,6 +150,7 @@ const loadImage = (src) =>
 
 // Loads image and then executes onWindowRezize to fix on load hight bug
 loadImage("./pictures/crt.png").then(onWindowResize).then(init);
+*/
 
 function init() {
   //On load
