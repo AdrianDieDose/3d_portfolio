@@ -39,8 +39,7 @@ main {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 250vh 100vh 100vh;
-  left: 0;
-  top: 0;
+
   overflow: hidden;
 }
 

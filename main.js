@@ -1,3 +1,9 @@
+// TODO
+
+// We need to reset the page on reload to initial cords
+// Loading bar to not mess around while loading
+// Better text etc..
+
 import "./style.css";
 
 import * as THREE from "three";
