@@ -150,7 +150,7 @@ function loadImage(url) {
   });
 }
 
-loadImage("./pictures/crt.png").then(onWindowResize).then(init);
+loadImage("/pictures/crt.png").then(onWindowResize).then(init);
 
 function init() {
   //On load
