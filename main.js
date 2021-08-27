@@ -181,6 +181,7 @@ function onWindowResize() {
 document.body.onresize = onWindowResize;
 
 function changeCss() {
+  console.log(this.scrollY);
   if (this.scrollY >= scrollLength) {
     canvas.style.paddingBottom =
       this.scrollY + y * paddingBottomCanvas - scrollLength + "px";
