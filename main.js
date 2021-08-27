@@ -144,7 +144,7 @@ function loadImage(url) {
     const image = new Image();
     image.addEventListener("load", () => {
       resolve(image);
-      tvImage.src = url;
+      console.log("test");
     });
     image.src = url;
   });
