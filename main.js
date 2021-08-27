@@ -144,13 +144,16 @@ function loadImage(url) {
     const image = new Image();
     image.addEventListener("load", () => {
       resolve(image);
-      console.log("test");
+      console.log(tvImage.src);
     });
+    console.log(tvImage.src);
+
     image.src = url;
+    console.log("test1");
   });
 }
 
-loadImage("/pictures/crt.png").then(onWindowResize).then(init);
+loadImage(tvImage.src).then(onWindowResize).then(init);
 
 function init() {
   //On load
