@@ -150,12 +150,12 @@ function loadImage(url) {
     const image = new Image();
     image.addEventListener("load", () => {
       resolve(image);
-      console.log(tvImage.src);
+      //console.log(tvImage.src);
     });
-    console.log(tvImage.src);
+    //console.log(tvImage.src);
 
     image.src = url;
-    console.log("test1");
+    //console.log("test1");
   });
 }
 
@@ -169,7 +169,7 @@ function init() {
 
 // Resize function
 function onWindowResize() {
-  console.log(tvImage.clientHeight * 0.63);
+  //console.log(tvImage.clientHeight * 0.63);
 
   let tvText = document.getElementsByClassName("tv-text")[0];
   renderer.setSize(tvImage.clientWidth * 0.8, tvImage.clientHeight * 0.63);
